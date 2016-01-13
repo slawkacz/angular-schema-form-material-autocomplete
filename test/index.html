@@ -1,0 +1,107 @@
+<html>
+
+<head>
+    <script src="../bower_components/angular/angular.min.js"></script>
+
+    <script src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="../bower_components/tv4/tv4.js"></script>
+    <script src="../bower_components/objectpath/lib/ObjectPath.js"></script>
+    <script src="../bower_components/angular-schema-form/dist/schema-form.min.js"></script>
+    <script src="../bower_components/angular-schema-form-bootstrap/bootstrap-decorator.min.js"></script>
+    <script src="../bower_components/angular-aria/angular-aria.js"></script>
+    <script src="../bower_components/angular-animate/angular-animate.js"></script>
+    <script src="../bower_components/angular-material/angular-material.js"></script>
+    <script src="../dist/autocomplete-material.js"></script>
+
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bower_components/angular-material/angular-material.min.css">
+    <link rel="stylesheet" href="main.css">
+
+    <script>
+        angular.module('test', ["ngMaterial", "schemaForm", "autocompleteMaterial"]).controller('FormController', function ($scope, $q) {
+
+    $scope.schema = {
+        "type": "object",
+        "properties": {
+            "name": {
+                "type": "string",
+                "title": "Name",
+                "description": "Name or alias",
+                "maxLength": 10,
+                "minLength": 2,
+                "required": true,
+                "placeholder":"My placeholder"
+            }
+        }
+    }
+    
+    $scope.getMatches = function (searchText) {
+        var deffered = $q.defer();
+        setTimeout(function(){
+            deffered.resolve([{value:searchText,display:searchText},{value:'a',display:'A'},{value:'b',display:'B'}])
+        },200)
+        return deffered.promise;
+    }
+
+    $scope.form = [{ 
+        "type": "autocomplete-material", 
+        "key": "name", 
+        "myOwnFormOption": "Hello world!",
+        "options": {
+            asyncCallback: $scope.getMatches
+        },
+         onSearchChange: function () {
+             console.log(arguments);
+        },
+        onBlur:function(scope,searchText){
+            if(searchText) {
+                scope.$$childHead.$mdAutocompleteCtrl.scope.selectedItem = {value:searchText, display:searchText};
+            
+            } else {
+                scope.$$childHead.$mdAutocompleteCtrl.scope.selectedItem = '';
+               
+            }    
+        }
+        }]
+    $scope.model = {};
+
+    $scope.debug = { schema: $scope.schema, form: $scope.form };
+
+});
+    </script>
+    <title>Testing autocomplete-material ASF addon</title>
+</head>
+
+<body ng-app="test">
+    <div class="container-fluid" ng-controller="FormController">
+
+        <div class="col-sm-6 form">
+            <form sf-schema="schema" sf-form="form" sf-model="model"></form>
+        </div>
+
+        <div class="col-sm-6 debug">
+            <div class="wrapper">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>Model</h4>
+                        <pre>{{model | json}}</pre>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>Form</h4>
+                        <pre>{{debug.form | json}}</pre>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>Schema</h4>
+                        <pre>{{debug.schema | json}}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
