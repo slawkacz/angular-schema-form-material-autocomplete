@@ -1,10 +1,10 @@
 <div>
     <!-- Surrounding DIV for sfField builder to add a sfField directive to. -->
-    <div class="pull-left">
+    <div class="pull-left" ng-controller="autocompleterCtrl">
         <label>{{form.title}}</label>
-        <md-autocomplete ng-model="$$value$$" sf-changed="form" md-selected-item="$$value$$" md-selected-item-change="form.onChange(this)"
+        <md-autocomplete ng-model="$$value$$" sf-changed="form" md-selected-item="$$value$$" md-selected-item-change="form.onSelect(this)"
         schema-validate="form" md-search-text="searchText" placeholder="{{form.schema.placeholder}}" ng-blur="form.onBlur(this, searchText)"
-        ng-keydown="form.onBlur(this, searchText)" md-search-text-change="form.onSearchChange(form,searchText)" md-min-length="2"
+        ng-keydown="form.onBlur(this, searchText)" md-search-text-change="form.onSearchChange(form,searchText)"
         md-items="item in form.options.asyncCallback(form, searchText)" md-item-text="item.display">
             <span md-highlight-text="searchText">{{item.display}}</span>
         </md-autocomplete>
