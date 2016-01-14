@@ -15,6 +15,6 @@
     "bootstrap": "~3.3.6"
   },
   "dependencies": {
-    "angular-material": "#master"
+    "angular-material": "~1.0.1"
   }
 }
