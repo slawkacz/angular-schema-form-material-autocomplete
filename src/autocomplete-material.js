@@ -13,7 +13,8 @@ angular.module('autocompleteMaterial', [
 }).controller('autocompleterCtrl', function ($scope) {
     $scope.$on('refreshAutocompleter', function (e, key) {
         if (_.isEqual($scope.$parent.form.key, key)) {
-            $scope.$$childHead.$mdAutocompleteCtrl.clear();
+            
+            //$scope.$$childHead.$mdAutocompleteCtrl.clear();
         }
     });
     $scope.onBlur = function (newValue) { 
