@@ -1,5 +1,6 @@
 angular.module('autocompleteMaterial', [
     'schemaForm',
+    'LiveSearch',
     'templates'
 ]).config(function (schemaFormDecoratorsProvider, sfBuilderProvider) {
     schemaFormDecoratorsProvider.defineAddOn(
@@ -12,7 +13,12 @@ angular.module('autocompleteMaterial', [
 }).controller('autocompleterCtrl', function ($scope) {
     $scope.$on('refreshAutocompleter', function (e, key) {
         if (_.isEqual($scope.$parent.form.key, key)) {
-            $scope.$$childHead.$mdAutocompleteCtrl.clear();  
+            $scope.$$childHead.$mdAutocompleteCtrl.clear();
         }
-    })
+    });
+    $scope.onBlur = function (newValue) { 
+        $scope.$$childHead.ngModel = newValue.item;
+        return newValue.item.display;
+
+    }
 });

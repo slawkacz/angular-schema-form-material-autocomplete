@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="main.css">
 
     <script>
-        angular.module('test', ["ngMaterial", "schemaForm", "autocompleteMaterial"]).controller('FormController', function ($scope, $q) {
+        angular.module('test', ["ngMaterial", "autocompleteMaterial"]).controller('FormController', function ($scope, $q) {
 
     $scope.schema = {
         "type": "object",
@@ -35,11 +35,11 @@
         }
     }
     
-    $scope.getMatches = function (searchText) {
+    $scope.getMatches = function (form,searchText) {
         var deffered = $q.defer();
         setTimeout(function(){
             deffered.resolve([{value:searchText,display:searchText},{value:'a',display:'A'},{value:'b',display:'B'}])
-        },200)
+        },1000)
         return deffered.promise;
     }
 
@@ -50,18 +50,6 @@
         "options": {
             asyncCallback: $scope.getMatches
         },
-         onSearchChange: function () {
-             console.log(arguments);
-        },
-        onBlur:function(scope,searchText){
-            if(searchText) {
-                scope.$$childHead.$mdAutocompleteCtrl.scope.selectedItem = {value:searchText, display:searchText};
-            
-            } else {
-                scope.$$childHead.$mdAutocompleteCtrl.scope.selectedItem = '';
-               
-            }    
-        }
         }]
     $scope.model = {};
 
