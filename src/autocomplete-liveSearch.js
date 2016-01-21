@@ -56,7 +56,8 @@ angular.module("LiveSearch", ["ng"])
                     scope.loading = false;
                     scope.abort = true;
                     scope.selectedIndex = -1;
-                    scope.results = [{ value: element.val(), display: element.val() }]
+                    scope.results = [{ value: element.val(), display: element.val() }];
+                    console.log(scope.results);
                     scope.select(0);
                 }
                 element[0].onkeydown = function setSelected(e) {
@@ -135,6 +136,10 @@ angular.module("LiveSearch", ["ng"])
                         });
                     }, scope.liveSearchWaitTimeout || 100);
                 };
+                scope.clear = function () {
+                    element.val(null);
+                    element[0].onblur();
+                }
                 var template = $templateCache.get("src/templates/autocomplete-list.html");
                 var searchPopup = $compile(template)(scope);
                 angular.element(element.parent())[0].appendChild(searchPopup[0]);
