@@ -57,7 +57,6 @@ angular.module("LiveSearch", ["ng"])
                     scope.abort = true;
                     scope.selectedIndex = -1;
                     scope.results = [{ value: element.val(), display: element.val() }];
-                    console.log(scope.results);
                     scope.select(0);
                 }
                 element[0].onkeydown = function setSelected(e) {

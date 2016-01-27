@@ -59,7 +59,6 @@ angular.module("LiveSearch", ["ng"])
                     scope.abort = true;
                     scope.selectedIndex = -1;
                     scope.results = [{ value: element.val(), display: element.val() }];
-                    console.log(scope.results);
                     scope.select(0);
                 }
                 element[0].onkeydown = function setSelected(e) {
@@ -166,9 +165,11 @@ angular.module('autocompleteMaterial', [
             $scope.$$childHead.clear();
         }
     });
-    $scope.onBlur = function (newValue) { 
+    $scope.onBlur = function (newValue) {
+        console.log('herer');
         $scope.$$childHead.ngModel = newValue.item;
+        if ($scope.$parent.form.onSelect)
+            $scope.$parent.form.onSelect();
         return newValue.item.display;
-
     }
 });

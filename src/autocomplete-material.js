@@ -16,9 +16,11 @@ angular.module('autocompleteMaterial', [
             $scope.$$childHead.clear();
         }
     });
-    $scope.onBlur = function (newValue) { 
+    $scope.onBlur = function (newValue) {
+        console.log('herer');
         $scope.$$childHead.ngModel = newValue.item;
+        if ($scope.$parent.form.onSelect)
+            $scope.$parent.form.onSelect();
         return newValue.item.display;
-
     }
 });
