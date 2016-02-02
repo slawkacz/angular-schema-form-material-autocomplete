@@ -119,6 +119,7 @@ angular.module("LiveSearch", ["ng"])
                         scope.visible = false;
                        
                         promise.then(function (dataArray) {
+                            scope.abort = false; 
                             if (dataArray) {
                                 results = dataArray.slice(0, (scope.liveSearchMaxResultSize || 20) - 1);
                             }
