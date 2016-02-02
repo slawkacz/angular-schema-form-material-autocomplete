@@ -17,6 +17,7 @@ angular.module('autocompleteMaterial', [
         }
     });
     $scope.onBlur = function (newValue) {
+        console.log(newValue);
         $scope.$$childHead.ngModel = newValue.item;
         if ($scope.$parent.form.onSelect)
             $scope.$parent.form.onSelect();

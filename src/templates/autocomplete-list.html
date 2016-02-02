@@ -46,7 +46,7 @@
     </style>
     <div class="searchresultspopup-wrapper">
         <ul ng-show='visible' ng-if="results.length" class='searchresultspopup'>
-            <li ng-class="{ 'selected' : isSelected($index) }" ng-click='select($index)' ng-repeat='result in results'>
+            <li ng-class="{ 'selected' : isSelected($index) }" ng-click='select($index,true)' ng-repeat='result in results'>
                 <span>{{result.display}}</span>
             </li>
         </ul>

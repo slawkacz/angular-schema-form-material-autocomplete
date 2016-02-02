@@ -21,7 +21,8 @@ angular.module("LiveSearch", ["ng"])
                 scope.selectedIndex = -1;
 
 
-                scope.select = function (index) {
+                scope.select = function (index,selectedFromList) {
+                    scope.selectedFromList = selectedFromList;
                     scope.selectedIndex = index;
                     scope.visible = false;
                 };
@@ -52,12 +53,15 @@ angular.module("LiveSearch", ["ng"])
                     }
                 });
                 element[0].onblur = function () {
-                    scope.visible = false;
-                    scope.loading = false;
-                    scope.abort = true;
-                    scope.selectedIndex = -1;
-                    scope.results = [{ value: element.val(), display: element.val() }];
-                    scope.select(0);
+                    if(!scope.selectedFromList) {
+                        scope.visible = false;
+                        scope.loading = false;
+                        scope.abort = true;
+                        var item = { value: element.val(), display: element.val() };
+                        scope.results = [item];
+                        scope.liveSearchSelectCallback.call(null, { items: scope.results, item: item })
+                        scope.liveSearchValue = item;
+                    }
                 }
                 element[0].onkeydown = function setSelected(e) {
                     //keydown
@@ -83,6 +87,7 @@ angular.module("LiveSearch", ["ng"])
                         //keydown or keyup
                         if (e.keyCode == 13) {
                             scope.visible = false;
+                            scope.selectedFromList = true;
                         }
 
                         //unmanaged code needs to force apply

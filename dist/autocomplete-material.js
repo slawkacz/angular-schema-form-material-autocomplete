@@ -1,4 +1,4 @@
-angular.module("templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("src/templates/autocomplete-list.html","<div>\n    <style>\n        .searchresultspopup-wrapper {\n            margin-top: -19px;\n            position: absolute;\n            z-index: 9999;\n            width: 100%\n        }\n        \n        .searchresultspopup {\n            border-radius: 0;\n            border: none;\n            -webkit-box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);\n            -moz-box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);\n            box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);\n            z-index: 1000;\n            float: left;\n            min-width: 100%;\n            padding: 5px 0;\n            margin: 2px 0 0;\n            font-size: 14px;\n            text-align: left;\n            list-style: none;\n            background-color: #fff;\n            -webkit-background-clip: padding-box;\n            background-clip: padding-box;\n            border: 1px solid #ccc;\n            border: 1px solid rgba(0, 0, 0, .15);\n        }\n        \n        .searchresultspopup span {\n            display: block;\n            padding: 3px 20px;\n            clear: both;\n            font-weight: normal;\n            line-height: 1.42857143;\n            color: #333;\n            white-space: nowrap;\n        }\n        \n        .searchresultspopup li.selected {\n            color: #262626;\n            text-decoration: none;\n            background-color: #f5f5f5;\n        }\n    </style>\n    <div class=\"searchresultspopup-wrapper\">\n        <ul ng-show=\'visible\' ng-if=\"results.length\" class=\'searchresultspopup\'>\n            <li ng-class=\"{ \'selected\' : isSelected($index) }\" ng-click=\'select($index)\' ng-repeat=\'result in results\'>\n                <span>{{result.display}}</span>\n            </li>\n        </ul>\n        <md-progress-linear ng-if=\"loading\" md-mode=\"indeterminate\"></md-progress-linear>\n    </div>\n</div>");
+angular.module("templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("src/templates/autocomplete-list.html","<div>\n    <style>\n        .searchresultspopup-wrapper {\n            margin-top: -19px;\n            position: absolute;\n            z-index: 9999;\n            width: 100%\n        }\n        \n        .searchresultspopup {\n            border-radius: 0;\n            border: none;\n            -webkit-box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);\n            -moz-box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);\n            box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);\n            z-index: 1000;\n            float: left;\n            min-width: 100%;\n            padding: 5px 0;\n            margin: 2px 0 0;\n            font-size: 14px;\n            text-align: left;\n            list-style: none;\n            background-color: #fff;\n            -webkit-background-clip: padding-box;\n            background-clip: padding-box;\n            border: 1px solid #ccc;\n            border: 1px solid rgba(0, 0, 0, .15);\n        }\n        \n        .searchresultspopup span {\n            display: block;\n            padding: 3px 20px;\n            clear: both;\n            font-weight: normal;\n            line-height: 1.42857143;\n            color: #333;\n            white-space: nowrap;\n        }\n        \n        .searchresultspopup li.selected {\n            color: #262626;\n            text-decoration: none;\n            background-color: #f5f5f5;\n        }\n    </style>\n    <div class=\"searchresultspopup-wrapper\">\n        <ul ng-show=\'visible\' ng-if=\"results.length\" class=\'searchresultspopup\'>\n            <li ng-class=\"{ \'selected\' : isSelected($index) }\" ng-click=\'select($index,true)\' ng-repeat=\'result in results\'>\n                <span>{{result.display}}</span>\n            </li>\n        </ul>\n        <md-progress-linear ng-if=\"loading\" md-mode=\"indeterminate\"></md-progress-linear>\n    </div>\n</div>");
 $templateCache.put("src/templates/autocomplete-material.html","<div>\n    <!-- Surrounding DIV for sfField builder to add a sfField directive to. -->\n    <div class=\"pull-left\" ng-controller=\"autocompleterCtrl\">\n        <label>{{form.title}}</label>\n\n        <div style=\'position:relative\'>\n            <live-search type=\"text\" live-search-callback=\"form.options.asyncCallback\"\n        live-search-item-template=\"{{result.display}}\" live-search-select=\"display\" live-search-value=\"$$value$$\" live-search-select-callback=\"onBlur\"></live-search>\n        </div>\n        <!-- sf-field-model let\'s the ngModel builder know that you want a ng-model that matches against the form key here -->\n        <!-- schema-validate=\"form\" validates the form against the schema -->\n\n        <!-- Description & Validation messages -->\n    </div>\n</div>");}]);
 angular.module("LiveSearch", ["ng"])
     .directive("liveSearch", ["$compile", "$timeout", "$templateCache", function ($compile, $timeout, $templateCache) {
@@ -23,7 +23,8 @@ angular.module("LiveSearch", ["ng"])
                 scope.selectedIndex = -1;
 
 
-                scope.select = function (index) {
+                scope.select = function (index,selectedFromList) {
+                    scope.selectedFromList = selectedFromList;
                     scope.selectedIndex = index;
                     scope.visible = false;
                 };
@@ -54,12 +55,15 @@ angular.module("LiveSearch", ["ng"])
                     }
                 });
                 element[0].onblur = function () {
-                    scope.visible = false;
-                    scope.loading = false;
-                    scope.abort = true;
-                    scope.selectedIndex = -1;
-                    scope.results = [{ value: element.val(), display: element.val() }];
-                    scope.select(0);
+                    if(!scope.selectedFromList) {
+                        scope.visible = false;
+                        scope.loading = false;
+                        scope.abort = true;
+                        var item = { value: element.val(), display: element.val() };
+                        scope.results = [item];
+                        scope.liveSearchSelectCallback.call(null, { items: scope.results, item: item })
+                        scope.liveSearchValue = item;
+                    }
                 }
                 element[0].onkeydown = function setSelected(e) {
                     //keydown
@@ -85,6 +89,7 @@ angular.module("LiveSearch", ["ng"])
                         //keydown or keyup
                         if (e.keyCode == 13) {
                             scope.visible = false;
+                            scope.selectedFromList = true;
                         }
 
                         //unmanaged code needs to force apply
@@ -172,6 +177,7 @@ angular.module('autocompleteMaterial', [
         }
     });
     $scope.onBlur = function (newValue) {
+        console.log(newValue);
         $scope.$$childHead.ngModel = newValue.item;
         if ($scope.$parent.form.onSelect)
             $scope.$parent.form.onSelect();
