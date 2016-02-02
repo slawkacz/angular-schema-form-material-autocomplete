@@ -117,11 +117,15 @@ angular.module("LiveSearch", ["ng"])
                         scope.loading = true;
                         scope.abort = false;
                         scope.visible = false;
+                       
                         promise.then(function (dataArray) {
                             if (dataArray) {
                                 results = dataArray.slice(0, (scope.liveSearchMaxResultSize || 20) - 1);
                             }
                             return;
+                        });
+                        promise.catch(function() {
+                           scope.abort = true; 
                         });
                         promise.finally(function () {
                             if (!scope.abort) {
@@ -131,6 +135,7 @@ angular.module("LiveSearch", ["ng"])
                                 scope.results = results.filter(function (elem, pos) {
                                     return results.indexOf(elem) == pos;
                                 });
+                                return;
                             }
                         });
                     }, scope.liveSearchWaitTimeout || 100);
