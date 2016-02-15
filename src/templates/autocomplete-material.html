@@ -6,7 +6,6 @@
         <div style='position:relative'>
             <live-search 
             type="text" 
-            style="margin-bottom:0;"
             live-search-callback="form.options.asyncCallback"
             live-search-item-template="{{result.display}}" 
             live-search-select="display" 
@@ -14,7 +13,7 @@
             live-search-select-callback="onBlur">
             </live-search>
         </div>
-         <div class="help-block" ng-if="hasError()" sf-message="(form.description || 'Required')"></div>
+         <div style="margin-top:-10px;" class="help-block" ng-if="hasError()" sf-message="(form.description || 'Required')"></div>
         <!-- sf-field-model let's the ngModel builder know that you want a ng-model that matches against the form key here -->
         <!-- schema-validate="form" validates the form against the schema -->
         <span schema-validate="form" ng-model="$$value$$"></span>
