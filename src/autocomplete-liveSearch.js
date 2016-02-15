@@ -53,10 +53,12 @@ angular.module("LiveSearch", ["ng"])
                     }
                 });
                 element[0].onblur = function () {
+                    scope.abort = true;
+                    scope.manualyAborted = true;
+                    $timeout.cancel(timeout);
                     if(!scope.selectedFromList) {
                         scope.visible = false;
                         scope.loading = false;
-                        scope.abort = true;
                         var item = { value: element.val(), display: element.val() };
                         scope.results = [item];
                         scope.liveSearchSelectCallback.call(null, { items: scope.results, item: item })
@@ -64,6 +66,9 @@ angular.module("LiveSearch", ["ng"])
                     }
                 }
                 element[0].onkeydown = function setSelected(e) {
+                    if(e.ctrlKey || e.metaKey) {
+                        e.preventDefault();
+                    }
                     //keydown
                     if (scope.visible) {
                         if (e.keyCode == 40) {
@@ -95,7 +100,8 @@ angular.module("LiveSearch", ["ng"])
                     }
                 };
 
-                element[0].onkeyup = function startSearch(e) {
+                var startSearch = function startSearch(e) {
+                    
                     if (e.keyCode == 13)
                         element[0].onblur();
                     if (e.keyCode == 13 || e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40) {
@@ -112,6 +118,7 @@ angular.module("LiveSearch", ["ng"])
                     if (search_string.length < 1 ||
                         (scope.liveSearchMaxlength !== null && search_string.length > scope.liveSearchMaxlength)) {
                         scope.visible = false;
+                        
                         //unmanaged code needs to force apply
                         scope.$apply();
                         return;
@@ -122,7 +129,7 @@ angular.module("LiveSearch", ["ng"])
                         scope.loading = true;
                         scope.abort = false;
                         scope.visible = false;
-                       
+                        scope.manualyAborted = false;     
                         promise.then(function (dataArray) {
                             scope.abort = false; 
                             if (dataArray) {
@@ -134,7 +141,7 @@ angular.module("LiveSearch", ["ng"])
                            scope.abort = true; 
                         });
                         promise.finally(function () {
-                            if (!scope.abort) {
+                            if (!scope.abort && !scope.manualyAborted) {
                                 scope.visible = true;
                                 scope.loading = false;
                                 scope.selectedIndex = -1;
@@ -146,6 +153,7 @@ angular.module("LiveSearch", ["ng"])
                         });
                     }, scope.liveSearchWaitTimeout || 100);
                 };
+                element[0].onkeyup = startSearch
                 scope.clear = function () {
                     element.val(null);
                     element[0].onblur();

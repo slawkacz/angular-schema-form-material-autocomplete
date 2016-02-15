@@ -1,15 +1,23 @@
 <div>
     <!-- Surrounding DIV for sfField builder to add a sfField directive to. -->
-    <div class="pull-left" ng-controller="autocompleterCtrl">
+    <div class="pull-left" ng-controller="autocompleterCtrl" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
         <label>{{form.title}}</label>
 
         <div style='position:relative'>
-            <live-search type="text" live-search-callback="form.options.asyncCallback"
-        live-search-item-template="{{result.display}}" live-search-select="display" live-search-value="$$value$$" live-search-select-callback="onBlur"></live-search>
+            <live-search 
+            type="text" 
+            style="margin-bottom:0;"
+            live-search-callback="form.options.asyncCallback"
+            live-search-item-template="{{result.display}}" 
+            live-search-select="display" 
+            live-search-value="$$value$$" 
+            live-search-select-callback="onBlur">
+            </live-search>
         </div>
+         <div class="help-block" ng-if="hasError()" sf-message="(form.description || 'Required')"></div>
         <!-- sf-field-model let's the ngModel builder know that you want a ng-model that matches against the form key here -->
         <!-- schema-validate="form" validates the form against the schema -->
-
+        <span schema-validate="form" ng-model="$$value$$"></span>
         <!-- Description & Validation messages -->
-    </div>
+    </div>    
 </div>
