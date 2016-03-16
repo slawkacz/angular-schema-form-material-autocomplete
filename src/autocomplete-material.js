@@ -19,7 +19,7 @@ angular.module('autocompleteMaterial', [
     $scope.onBlur = function (newValue) {
         $scope.$$childHead.ngModel = newValue.item;
         if ($scope.$parent.form.onSelect)
-            $scope.$parent.form.onSelect();
+            $scope.$parent.form.onSelect($scope);
         return newValue.item.display;
     }
 });
