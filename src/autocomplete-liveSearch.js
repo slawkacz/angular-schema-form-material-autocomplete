@@ -78,7 +78,7 @@ angular.module("LiveSearch", ["ng"])
                             else {
                                 scope.selectedIndex++;
                             }
-                        } 
+                        }
                         //keyup
                         else if (e.keyCode == 38) {
                             if (scope.selectedIndex === 0) {
@@ -101,7 +101,7 @@ angular.module("LiveSearch", ["ng"])
                 };
 
                 var startSearch = function startSearch(e) {
-                    
+
                     if (e.keyCode == 13)
                         element[0].onblur();
                     if (e.keyCode == 13 || e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40) {
@@ -114,11 +114,11 @@ angular.module("LiveSearch", ["ng"])
                     var vals = target.val().split(",");
                     var search_string = vals[vals.length - 1].trim();
                     // Do Search
-                    
+
                     if (search_string.length < 1 ||
                         (scope.liveSearchMaxlength !== null && search_string.length > scope.liveSearchMaxlength)) {
                         scope.visible = false;
-                        
+
                         //unmanaged code needs to force apply
                         scope.$apply();
                         return;
@@ -129,16 +129,16 @@ angular.module("LiveSearch", ["ng"])
                         scope.loading = true;
                         scope.abort = false;
                         scope.visible = false;
-                        scope.manualyAborted = false;     
+                        scope.manualyAborted = false;
                         promise.then(function (dataArray) {
-                            scope.abort = false; 
+                            scope.abort = false;
                             if (dataArray) {
                                 results = dataArray.slice(0, (scope.liveSearchMaxResultSize || 20) - 1);
                             }
                             return;
                         });
                         promise.catch(function() {
-                           scope.abort = true; 
+                           scope.abort = true;
                         });
                         promise.finally(function () {
                             if (!scope.abort && !scope.manualyAborted) {

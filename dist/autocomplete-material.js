@@ -1,4 +1,4 @@
-angular.module("templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("src/templates/autocomplete-list.html","<div>\n    <style>\n        .searchresultspopup-wrapper {\n            margin-top: -19px;\n            position: absolute;\n            z-index: 9999;\n            width: 100%\n        }\n        \n        .searchresultspopup {\n            border-radius: 0;\n            border: none;\n            -webkit-box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);\n            -moz-box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);\n            box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);\n            z-index: 1000;\n            float: left;\n            min-width: 100%;\n            padding: 5px 0;\n            margin: 2px 0 0;\n            font-size: 14px;\n            text-align: left;\n            list-style: none;\n            background-color: #fff;\n            -webkit-background-clip: padding-box;\n            background-clip: padding-box;\n            border: 1px solid #ccc;\n            border: 1px solid rgba(0, 0, 0, .15);\n        }\n        \n        .searchresultspopup span {\n            display: block;\n            padding: 3px 20px;\n            clear: both;\n            font-weight: normal;\n            line-height: 1.42857143;\n            color: #333;\n            white-space: nowrap;\n        }\n        \n        .searchresultspopup li.selected {\n            color: #262626;\n            text-decoration: none;\n            background-color: #f5f5f5;\n        }\n    </style>\n    <div class=\"searchresultspopup-wrapper\">\n        <ul ng-show=\'visible\' ng-if=\"results.length\" class=\'searchresultspopup\'>\n            <li ng-class=\"{ \'selected\' : isSelected($index) }\" ng-click=\'select($index,true)\' ng-repeat=\'result in results\'>\n                <span>{{result.display}}</span>\n            </li>\n        </ul>\n        <md-progress-linear ng-if=\"loading\" md-mode=\"indeterminate\"></md-progress-linear>\n    </div>\n</div>");
+angular.module("templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("src/templates/autocomplete-list.html","<div>\n    <style>\n        .searchresultspopup-wrapper {\n            margin-top: -19px;\n            position: absolute;\n            z-index: 9999;\n            width: 100%\n        }\n\n        .searchresultspopup {\n            border-radius: 0;\n            border: none;\n            -webkit-box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);\n            -moz-box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);\n            box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);\n            z-index: 1000;\n            float: left;\n            min-width: 100%;\n            padding: 5px 0;\n            margin: 2px 0 0;\n            font-size: 14px;\n            text-align: left;\n            list-style: none;\n            background-color: #fff;\n            -webkit-background-clip: padding-box;\n            background-clip: padding-box;\n            border: 1px solid #ccc;\n            border: 1px solid rgba(0, 0, 0, .15);\n        }\n\n        .searchresultspopup span {\n            display: block;\n            padding: 3px 20px;\n            clear: both;\n            font-weight: normal;\n            line-height: 1.42857143;\n            color: #333;\n            white-space: nowrap;\n        }\n\n        .searchresultspopup li.selected {\n            color: #262626;\n            text-decoration: none;\n            background-color: #f5f5f5;\n        }\n    </style>\n    <div class=\"searchresultspopup-wrapper\">\n        <ul ng-show=\'visible\' ng-if=\"results.length\" class=\'searchresultspopup\'>\n            <li ng-class=\"{ \'selected\' : isSelected($index) }\" ng-click=\'select($index,true)\' ng-mousedown=\'select($index,true)\' ng-repeat=\'result in results\'>\n                <span>{{result.display}}</span>\n            </li>\n        </ul>\n        <md-progress-linear ng-if=\"loading\" md-mode=\"indeterminate\"></md-progress-linear>\n    </div>\n</div>\n");
 $templateCache.put("src/templates/autocomplete-material.html","<div>\n    <!-- Surrounding DIV for sfField builder to add a sfField directive to. -->\n    <div class=\"pull-left\" ng-controller=\"autocompleterCtrl\" ng-class=\"{\'has-error\': hasError(), \'has-success\': hasSuccess()}\">\n        <label>{{form.title}}</label>\n\n        <div style=\'position:relative\'>\n            <live-search \n            type=\"text\" \n            live-search-callback=\"form.options.asyncCallback\"\n            live-search-item-template=\"{{result.display}}\" \n            live-search-select=\"display\" \n            live-search-value=\"$$value$$\" \n            live-search-select-callback=\"onBlur\">\n            </live-search>\n        </div>\n         <div style=\"margin-top:-10px;\" class=\"help-block\" ng-if=\"hasError()\" sf-message=\"(form.description || \'Required\')\"></div>\n        <!-- sf-field-model let\'s the ngModel builder know that you want a ng-model that matches against the form key here -->\n        <!-- schema-validate=\"form\" validates the form against the schema -->\n        <span schema-validate=\"form\" ng-model=\"$$value$$\"></span>\n        <!-- Description & Validation messages -->\n    </div>    \n</div>");}]);
 angular.module("LiveSearch", ["ng"])
     .directive("liveSearch", ["$compile", "$timeout", "$templateCache", function ($compile, $timeout, $templateCache) {
@@ -80,7 +80,7 @@ angular.module("LiveSearch", ["ng"])
                             else {
                                 scope.selectedIndex++;
                             }
-                        } 
+                        }
                         //keyup
                         else if (e.keyCode == 38) {
                             if (scope.selectedIndex === 0) {
@@ -103,7 +103,7 @@ angular.module("LiveSearch", ["ng"])
                 };
 
                 var startSearch = function startSearch(e) {
-                    
+
                     if (e.keyCode == 13)
                         element[0].onblur();
                     if (e.keyCode == 13 || e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40) {
@@ -116,11 +116,11 @@ angular.module("LiveSearch", ["ng"])
                     var vals = target.val().split(",");
                     var search_string = vals[vals.length - 1].trim();
                     // Do Search
-                    
+
                     if (search_string.length < 1 ||
                         (scope.liveSearchMaxlength !== null && search_string.length > scope.liveSearchMaxlength)) {
                         scope.visible = false;
-                        
+
                         //unmanaged code needs to force apply
                         scope.$apply();
                         return;
@@ -131,16 +131,16 @@ angular.module("LiveSearch", ["ng"])
                         scope.loading = true;
                         scope.abort = false;
                         scope.visible = false;
-                        scope.manualyAborted = false;     
+                        scope.manualyAborted = false;
                         promise.then(function (dataArray) {
-                            scope.abort = false; 
+                            scope.abort = false;
                             if (dataArray) {
                                 results = dataArray.slice(0, (scope.liveSearchMaxResultSize || 20) - 1);
                             }
                             return;
                         });
                         promise.catch(function() {
-                           scope.abort = true; 
+                           scope.abort = true;
                         });
                         promise.finally(function () {
                             if (!scope.abort && !scope.manualyAborted) {
@@ -166,6 +166,7 @@ angular.module("LiveSearch", ["ng"])
             }
         };
     }]);
+
 angular.module('autocompleteMaterial', [
     'schemaForm',
     'LiveSearch',

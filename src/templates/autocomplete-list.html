@@ -6,7 +6,7 @@
             z-index: 9999;
             width: 100%
         }
-        
+
         .searchresultspopup {
             border-radius: 0;
             border: none;
@@ -27,7 +27,7 @@
             border: 1px solid #ccc;
             border: 1px solid rgba(0, 0, 0, .15);
         }
-        
+
         .searchresultspopup span {
             display: block;
             padding: 3px 20px;
@@ -37,7 +37,7 @@
             color: #333;
             white-space: nowrap;
         }
-        
+
         .searchresultspopup li.selected {
             color: #262626;
             text-decoration: none;
@@ -46,7 +46,7 @@
     </style>
     <div class="searchresultspopup-wrapper">
         <ul ng-show='visible' ng-if="results.length" class='searchresultspopup'>
-            <li ng-class="{ 'selected' : isSelected($index) }" ng-click='select($index,true)' ng-repeat='result in results'>
+            <li ng-class="{ 'selected' : isSelected($index) }" ng-click='select($index,true)' ng-mousedown='select($index,true)' ng-repeat='result in results'>
                 <span>{{result.display}}</span>
             </li>
         </ul>
